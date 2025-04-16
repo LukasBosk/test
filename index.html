@@ -52,20 +52,26 @@
         // Nastavení zobrazení mapy
         map.fitBounds(imageBounds);
 
-        // Přidání interaktivního markeru
-        function addMarker(x, y, text) {
-            const marker = L.marker([y, x], {
+        // Přidání interaktivního markeru na základě pixelových souřadnic
+        function addMarker(pixelX, pixelY, text, targetFile) {
+            // Přepočet pixelových souřadnic na souřadnice mapy
+            const mapY = imgHeight - pixelY; // Invertování Y osy (Leaflet používá opačnou osu Y)
+            const mapX = pixelX;
+
+            const marker = L.marker([mapY, mapX], {
                 icon: L.divIcon({
                     className: 'map-marker',
                     html: text,
                     iconSize: [20, 20]
                 })
             });
-            marker.addTo(map).bindPopup(`Klikli jste na: ${text}`);
+            marker.addTo(map).on('click', () => {
+                window.location.href = targetFile; // Přesměrování na cílový soubor
+            });
         }
 
-        // Přidání markeru (souřadnice jsou relativní k obrázku)
-        addMarker(1663, 1868, '1'); // Příklad markeru
+        // Přidání markeru s novými souřadnicemi (1668px, 1868px)
+        addMarker(1668, 1868, '1', 'bod1.html'); // Pixelové souřadnice obrázku (X, Y)
     </script>
 </body>
 </html>
