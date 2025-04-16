@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa test</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Výška celé obrazovky */
+            margin: 0;
+            background-color: #f0f0f0; /* Volitelně barva pozadí */
+        }
+        img {
+            max-width: 100%; /* Obrázek se přizpůsobí šířce obrazovky */
+            height: auto; /* Zachová proporce */
+        }
+    </style>
+</head>
+<body>
+    <!-- Obrázek s propojením na mapu -->
+    <img src="bod1.png" usemap="#bod1" alt="Interaktivní obrázek" style="width: 3713px; height: auto;">
+
+    <!-- Definice mapy a interaktivních oblastí -->
+    <map name="bod1">
+        <!-- Bod č. 1: Obdélník -->
+        <area shape="rect" coords="2744,1998,3052,2123" href="test.html" alt="Bod 1" title="Více informací o bodu 1">
+    </map>
+</body>
+</html>
+
