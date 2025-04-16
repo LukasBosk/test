@@ -3,72 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interaktivní mapa s OpenLayers</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@6.15.1/ol.css" />
+    <title>Interaktivní mapa s Leaflet.js</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         body {
             margin: 0;
-            overflow: hidden;
         }
         #map {
             width: 100vw; /* Celá šířka obrazovky */
             height: 100vh; /* Celá výška obrazovky */
         }
         .map-marker {
-            width: 20px;
-            height: 20px;
             background-color: red;
             border-radius: 50%;
-            transform: translate(-50%, -50%);
-            position: absolute;
-            z-index: 10;
-            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ol@6.15.1/ol.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // Rozměry obrázku
         const imgWidth = 6116;  // Šířka obrázku v pixelech
         const imgHeight = 8159; // Výška obrázku v pixelech
 
+        // Proměnná pro měřítko obrázku
+        const imageBounds = [[0, 0], [imgHeight, imgWidth]];
+
         // Inicializace mapy
-        const map = new ol.Map({
-            target: 'map',
-            view: new ol.View({
-                center: [imgWidth / 2, -imgHeight / 2], // Střed obrázku
-                zoom: 2, // Výchozí zoom
-                maxZoom: 5,
-                minZoom: 0,
-                extent: [0, -imgHeight, imgWidth, 0] // Omezení pohybu
-            }),
-            layers: [
-                new ol.layer.Image({
-                    source: new ol.source.ImageStatic({
-                        url: 'mapa.jpg', // Cesta k obrázku
-                        imageExtent: [0, -imgHeight, imgWidth, 0], // Souřadnice obrázku
-                    })
-                })
-            ]
+        const map = L.map('map', {
+            crs: L.CRS.Simple, // Zjednodušený CRS pro statické obrázky
+            minZoom: -2
         });
 
-        // Přidání interaktivních bodů
-        function addMarker(x, y, text) {
-            const marker = document.createElement('div');
-            marker.className = 'map-marker';
-            marker.title = text;
-            marker.style.left = `${(x / imgWidth) * 100}%`;
-            marker.style.top = `${(-y / imgHeight) * 100}%`;
+        // Načtení obrázku jako mapové vrstvy
+        const imageLayer = L.imageOverlay('mapa.jpg', imageBounds).addTo(map);
 
-            marker.onclick = () => alert(`Klikli jste na: ${text}`);
-            document.getElementById('map').appendChild(marker);
+        // Nastavení zobrazení mapy
+        map.fitBounds(imageBounds);
+
+        // Přidání interaktivního markeru
+        function addMarker(x, y, text) {
+            const marker = L.marker([y, x], {
+                icon: L.divIcon({
+                    className: 'map-marker',
+                    html: text,
+                    iconSize: [20, 20]
+                })
+            });
+            marker.addTo(map).bindPopup(`Klikli jste na: ${text}`);
         }
 
-        // Body relativní k obrázku
-        addMarker(1663, -1868, 'Bod 1');
+        // Přidání markeru (souřadnice jsou relativní k obrázku)
+        addMarker(1663, 1868, '1'); // Příklad markeru
     </script>
 </body>
 </html>
