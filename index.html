@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktivní mapa</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #map {
+            width: 100%;
+            height: 100%; /* Mapa vyplní celou obrazovku */
+        }
+        .map-point {
+            cursor: pointer;
+            background-color: red;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div> <!-- Kontejner pro mapu -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        // Inicializace mapy
+        const map = L.map('map', {
+            minZoom: -2, // Umožňuje větší přiblížení
+            maxZoom: 4,  // Umožňuje oddálení
+            crs: L.CRS.Simple // Pro použití s obrázkem, ne skutečnými zeměpisnými souřadnicemi
+        });
+
+        // Rozměry obrázku
+        const imgWidth = 6116;  // Šířka obrázku v pixelech
+        const imgHeight = 8159; // Výška obrázku v pixelech
+        const bounds = [[0, 0], [imgHeight, imgWidth]]; // Dolní levý a horní pravý roh
+
+        // Nastavení obrázku jako podkladu
+        const image = L.imageOverlay('mapa.jpg', bounds).addTo(map);
+
+        // Fitování mapy do rozměrů obrázku
+        map.fitBounds(bounds);
+
+        // Přidání interaktivních bodů
+        const point1 = L.circleMarker([1663, 1868], { // Souřadnice bodu
+            radius: 10,
+            color: 'red',
+            fillColor: 'red',
+            fillOpacity: 1
+        }).addTo(map).on('click', () => {
+            window.open('bod1.html');
+    </script>
+</body>
+</html>
