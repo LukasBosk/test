@@ -9,19 +9,21 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Výška celé obrazovky */
+            height: 100vh; /* Celá výška obrazovky */
             margin: 0;
             background-color: #f0f0f0; /* Volitelně barva pozadí */
         }
         img {
-            max-width: 100%; /* Obrázek se přizpůsobí šířce obrazovky */
+            max-width: 100vw; /* Obrázek se přizpůsobí šířce obrazovky */
+            max-height: 100vh; /* Obrázek se přizpůsobí výšce obrazovky */
+            width: auto; /* Zachová proporce */
             height: auto; /* Zachová proporce */
         }
     </style>
 </head>
 <body>
     <!-- Obrázek s propojením na mapu -->
-    <img src="bod1.png" usemap="#bod1" alt="Interaktivní obrázek" style="width: 3713px; height: auto;">
+    <img src="bod1.png" usemap="#bod1" alt="Interaktivní obrázek">
 
     <!-- Definice mapy a interaktivních oblastí -->
     <map name="bod1">
@@ -30,4 +32,3 @@
     </map>
 </body>
 </html>
-
