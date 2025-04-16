@@ -23,12 +23,52 @@
 </head>
 <body>
     <!-- Obrázek s propojením na mapu -->
-    <img src="bod1.png" usemap="#bod1" alt="Interaktivní obrázek">
+    <img id="interactive-image" src="bod1.png" usemap="#bod1" alt="Interaktivní obrázek">
 
     <!-- Definice mapy a interaktivních oblastí -->
     <map name="bod1">
-        <!-- Bod č. 1: Obdélník -->
-        <area shape="rect" coords="2744,1998,3052,2123" href="test.html" alt="Bod 1" title="Více informací o bodu 1">
+        <!-- Bod č. 1: Obdélník (originální souřadnice) -->
+        <area id="area1" shape="rect" coords="2744,1998,3052,2123" href="test.html" alt="Bod 1" title="Více informací o bodu 1">
     </map>
+
+    <script>
+        // Originální rozměry obrázku
+        const originalWidth = 3713; // Originální šířka obrázku
+        const originalHeight = 2781; // Originální výška obrázku
+
+        // Funkce pro přepočet souřadnic
+        function scaleCoords(coords, scaleX, scaleY) {
+            return coords.map((coord, index) => {
+                return index % 2 === 0 ? Math.round(coord * scaleX) : Math.round(coord * scaleY);
+            });
+        }
+
+        // Přepočet souřadnic při změně velikosti obrázku
+        function updateAreaCoords() {
+            const img = document.getElementById('interactive-image');
+            const area = document.getElementById('area1');
+
+            // Aktuální rozměry obrázku
+            const currentWidth = img.clientWidth;
+            const currentHeight = img.clientHeight;
+
+            // Poměry škálování
+            const scaleX = currentWidth / originalWidth;
+            const scaleY = currentHeight / originalHeight;
+
+            // Originální souřadnice
+            const originalCoords = [2744, 1998, 3052, 2123];
+
+            // Přepočítané souřadnice
+            const scaledCoords = scaleCoords(originalCoords, scaleX, scaleY);
+
+            // Nastavení nových souřadnic
+            area.coords = scaledCoords.join(',');
+        }
+
+        // Spuštění přepočtu při načtení stránky a při změně velikosti okna
+        window.onload = updateAreaCoords;
+        window.onresize = updateAreaCoords;
+    </script>
 </body>
 </html>
