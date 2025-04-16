@@ -3,60 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interaktivní mapa</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <title>Interaktivní mapa s OpenLayers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@latest/ol.css" />
     <style>
         body {
             margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden;
         }
         #map {
-            width: 100%;
-            height: 100%; /* Mapa vyplní celou obrazovku */
+            width: 100vw; /* Celá šířka obrazovky */
+            height: 100vh; /* Celá výška obrazovky */
         }
-        .map-point {
-            cursor: pointer;
-            background-color: red;
+        .map-marker {
             width: 20px;
             height: 20px;
+            background-color: red;
             border-radius: 50%;
-            border: 2px solid white;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            z-index: 10;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div id="map"></div> <!-- Kontejner pro mapu -->
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script>
-        // Inicializace mapy
-        const map = L.map('map', {
-            minZoom: -2, // Umožňuje větší přiblížení
-            maxZoom: 4,  // Umožňuje oddálení
-            crs: L.CRS.Simple // Pro použití s obrázkem, ne skutečnými zeměpisnými souřadnicemi
-        });
+    <div id="map"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/ol@latest/ol.js"></script>
+    <script>
         // Rozměry obrázku
         const imgWidth = 6116;  // Šířka obrázku v pixelech
         const imgHeight = 8159; // Výška obrázku v pixelech
-        const bounds = [[0, 0], [imgHeight, imgWidth]]; // Dolní levý a horní pravý roh
 
-        // Nastavení obrázku jako podkladu
-        const image = L.imageOverlay('mapa.jpg', bounds).addTo(map);
-
-        // Fitování mapy do rozměrů obrázku
-        map.fitBounds(bounds);
+        // Inicializace mapy
+        const map = new ol.Map({
+            target: 'map',
+            view: new ol.View({
+                center: [imgWidth / 2, -imgHeight / 2], // Střed obrázku
+                zoom: 2, // Výchozí zoom
+                maxZoom: 5,
+                minZoom: 0,
+                extent: [0, -imgHeight, imgWidth, 0] // Omezení pohybu
+            }),
+            layers: [
+                new ol.layer.Image({
+                    source: new ol.source.ImageStatic({
+                        url: 'mapa.jpg', // Cesta k obrázku
+                        imageExtent: [0, -imgHeight, imgWidth, 0], // Souřadnice obrázku
+                    })
+                })
+            ]
+        });
 
         // Přidání interaktivních bodů
-        const point1 = L.circleMarker([1663, 1868], { // Souřadnice bodu
-            radius: 10,
-            color: 'red',
-            fillColor: 'red',
-            fillOpacity: 1
-        }).addTo(map).on('click', () => {
-            window.open('bod1.html');
+        function addMarker(x, y, text) {
+            const marker = document.createElement('div');
+            marker.className = 'map-marker';
+            marker.title = text;
+            marker.style.left = `${(x / imgWidth) * 100}%`;
+            marker.style.top = `${(-y / imgHeight) * 100}%`;
+
+            marker.onclick = () => alert(`Klikli jste na: ${text}`);
+            document.getElementById('map').appendChild(marker);
+        }
+
+        // Body relativní k obrázku
+        addMarker(1663, -1868, 'Bod 1');
     </script>
 </body>
 </html>
