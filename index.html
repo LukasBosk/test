@@ -8,12 +8,13 @@
     <style>
         body {
             margin: 0;
-            background: url('pozadi.jpg') no-repeat center center fixed; /* Obrázek jako pozadí */
-            background-size: cover; /* Přizpůsobení obrázku velikosti obrazovky */
+            background: #f0f0f0; /* Záložní barva pozadí */
         }
         #map {
             width: 100vw; /* Celá šířka obrazovky */
             height: 100vh; /* Celá výška obrazovky */
+            background: url('pozadi.jpg') no-repeat center center; /* Obrázek jako pozadí */
+            background-size: cover; /* Přizpůsobení obrázku velikosti mapy */
         }
     </style>
 </head>
@@ -32,7 +33,9 @@
         // Inicializace mapy
         const map = L.map('map', {
             crs: L.CRS.Simple, // Zjednodušený CRS pro statické obrázky
-            minZoom: -4 // Možnost většího oddálení mapy
+            minZoom: -4, // Možnost většího oddálení mapy
+            maxBounds: imageBounds, // Omezení pohybu na obrázek
+            maxBoundsViscosity: 1.0 // Zamezení posunu mimo obrázek
         });
 
         // Načtení obrázku jako mapové vrstvy
